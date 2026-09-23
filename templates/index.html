@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>OfficeFlow</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="nav-brand">
+        <a href="/">OfficeFlow</a>
+    </div>
+
+    <div class="nav-links">
+        <a href="/clients">Clients</a>
+        <a href="/meetings">Meetings</a>
+        <a href="/tasks">Tasks</a>
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <!-- Welcome Section -->
+
+    <div class="dashboard-header">
+
+        <div>
+            <h1>Welcome to OfficeFlow</h1>
+
+            <p>
+                Manage clients, meetings and office tasks
+                from one place.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- Summary Cards -->
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+
+            <div>
+                <h3>Total Clients</h3>
+                <p id="clientCount">0</p>
+            </div>
+
+            <span class="summary-icon">👥</span>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div>
+                <h3>Total Meetings</h3>
+                <p id="meetingCount">0</p>
+            </div>
+
+            <span class="summary-icon">📅</span>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div>
+                <h3>Total Tasks</h3>
+                <p id="taskCount">0</p>
+            </div>
+
+            <span class="summary-icon">✓</span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Quick Actions -->
+
+    <div class="section-heading">
+
+        <h2>Quick Actions</h2>
+
+        <p>Access frequently used sections.</p>
+
+    </div>
+
+
+    <div class="quick-actions">
+
+        <a href="/clients">
+            <button>Add / View Clients</button>
+        </a>
+
+        <a href="/meetings">
+            <button>Schedule Meeting</button>
+        </a>
+
+        <a href="/tasks">
+            <button>Manage Tasks</button>
+        </a>
+
+    </div>
+
+
+    <!-- Management Section -->
+
+    <div class="section-heading">
+
+        <h2>Management</h2>
+
+        <p>Manage your day-to-day office activities.</p>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <!-- Clients -->
+
+        <div class="dashboard-card">
+
+            <h2>Client Management</h2>
+
+            <p>
+                Manage client information and contact details.
+            </p>
+
+            <a href="/clients">
+                <button>Manage Clients</button>
+            </a>
+
+        </div>
+
+
+        <!-- Meetings -->
+
+        <div class="dashboard-card">
+
+            <h2>Meeting Management</h2>
+
+            <p>
+                Schedule and keep track of client meetings.
+            </p>
+
+            <a href="/meetings">
+                <button>Manage Meetings</button>
+            </a>
+
+        </div>
+
+
+        <!-- Tasks -->
+
+        <div class="dashboard-card">
+
+            <h2>Task Management</h2>
+
+            <p>
+                Create tasks, assign responsibilities and track progress.
+            </p>
+
+            <a href="/tasks">
+                <button>Manage Tasks</button>
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-footer">
+
+        <p>
+            OfficeFlow • Internal Coordination System
+        </p>
+
+    </div>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>OfficeFlow - Clients</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">
+        <a href="/">OfficeFlow</a>
+    </div>
+
+    <div class="nav-links">
+        <a href="/clients">Clients</a>
+        <a href="/meetings">Meetings</a>
+        <a href="/tasks">Tasks</a>
+    </div>
+</nav>
+
+    <div class="container">
+        <a href="/" class="back-link">← Dashboard</a>
+
+        <h1>Client Management</h1>
+
+        <p>Manage your clients and their contact information.</p>
+
+        <div class="card">
+
+            <h2>Add New Client</h2>
+
+            <form id="clientForm">
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Client Name"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="company"
+                    placeholder="Company Name"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="country"
+                    placeholder="Country"
+                >
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email"
+                >
+
+                <input
+                    type="text"
+                    id="phone"
+                    placeholder="Phone"
+                >
+
+                <select id="status">
+                    <option value="Active">Active</option>
+                    <option value="Follow-up">Follow-up</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+
+                <button type="submit">
+                    Add Client
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Client List</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Company</th>
+                        <th>Country</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="clientTableBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <script src="/static/js/clients.js"></script>
+
+</body>
+</html>

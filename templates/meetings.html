@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>OfficeFlow - Meetings</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">
+        <a href="/">OfficeFlow</a>
+    </div>
+
+    <div class="nav-links">
+        <a href="/clients">Clients</a>
+        <a href="/meetings">Meetings</a>
+        <a href="/tasks">Tasks</a>
+    </div>
+</nav>
+
+    <div class="container">
+        <a href="/" class="back-link">← Dashboard</a>
+
+        <h1>Meeting Management</h1>
+
+        <p>Schedule and manage client meetings.</p>
+
+
+        <!-- Schedule Meeting -->
+
+        <div class="card">
+
+            <h2>Schedule New Meeting</h2>
+
+            <form id="meetingForm">
+
+                <select id="client_id" required>
+                    <option value="">Select Client</option>
+                </select>
+
+                <input
+                    type="text"
+                    id="title"
+                    placeholder="Meeting Title"
+                    required
+                >
+
+                <input
+                    type="date"
+                    id="date"
+                    required
+                >
+
+                <input
+                    type="time"
+                    id="time"
+                    required
+                >
+
+                <select id="meeting_type">
+
+                    <option value="Online">
+                        Online
+                    </option>
+
+                    <option value="Offline">
+                        Offline
+                    </option>
+
+                    <option value="Phone Call">
+                        Phone Call
+                    </option>
+
+                </select>
+
+                <input
+                    type="text"
+                    id="participants"
+                    placeholder="Participants"
+                >
+
+                <select id="status">
+
+                    <option value="Upcoming">
+                        Upcoming
+                    </option>
+
+                    <option value="Completed">
+                        Completed
+                    </option>
+
+                    <option value="Cancelled">
+                        Cancelled
+                    </option>
+
+                </select>
+
+                <textarea
+                    id="agenda"
+                    placeholder="Meeting Agenda"
+                    rows="4"
+                ></textarea>
+
+                <button type="submit">
+                    Schedule Meeting
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- Meeting List -->
+
+        <div class="card">
+
+            <h2>Upcoming & Recent Meetings</h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Client</th>
+                        <th>Meeting</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="meetingTableBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <script src="/static/js/meetings.js"></script>
+
+</body>
+
+</html>

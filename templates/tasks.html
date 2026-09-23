@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Task Management - OfficeFlow</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">
+        <a href="/">OfficeFlow</a>
+    </div>
+
+    <div class="nav-links">
+        <a href="/clients">Clients</a>
+        <a href="/meetings">Meetings</a>
+        <a href="/tasks">Tasks</a>
+    </div>
+</nav>
+
+<div class="container">
+    <a href="/" class="back-link">← Dashboard</a>
+
+    <h1>Task Management</h1>
+    <p>Create and track office tasks easily.</p>
+
+    <!-- Add Task -->
+    <div class="card">
+
+        <h2>Add New Task</h2>
+
+        <form id="taskForm">
+
+            <input
+                type="text"
+                id="title"
+                placeholder="Task title"
+                required
+            >
+
+            <input
+                type="text"
+                id="assigned_to"
+                placeholder="Assigned to"
+            >
+
+            <input
+                type="date"
+                id="due_date"
+            >
+
+            <select id="priority">
+
+                <option value="Low">Low Priority</option>
+                <option value="Medium" selected>Medium Priority</option>
+                <option value="High">High Priority</option>
+
+            </select>
+
+            <select id="status">
+
+                <option value="Pending" selected>Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+
+            </select>
+
+            <input
+                type="text"
+                id="description"
+                placeholder="Short description"
+            >
+
+            <button type="submit">
+                Add Task
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Task List -->
+    <div class="card">
+
+        <h2>Task List</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Assigned To</th>
+                    <th>Due Date</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="taskTableBody">
+                <!-- Tasks will appear here -->
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/tasks.js') }}"></script>
+
+</body>
+</html>
