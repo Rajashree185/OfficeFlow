@@ -1,188 +1,117 @@
-# OfficeFlow – Internal Office Coordination System
+# OfficeFlow – Office Administration & Management System
 
-[![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-2.x-lightgrey.svg)](https://flask.palletsprojects.com/)
-[![SQLite](https://img.shields.io/badge/SQLite-3-green.svg)](https://www.sqlite.org/)
+OfficeFlow is a web-based office administration and management system designed to organize and monitor day-to-day administrative activities in one place.
 
-OfficeFlow is a lightweight, web-based internal office coordination system designed to simplify everyday office activities such as managing clients, scheduling meetings, and tracking tasks. 
+The system helps manage client records, meetings, tasks, and administrative reports through a centralized dashboard.
 
-## ✨ Features
+## Features
 
 ### 📊 Dashboard
-- **Overview:** View the total number of clients, meetings, and tasks at a glance.
-- **Quick Access:** Seamless navigation to different modules.
-- **User-Friendly:** Simple and clean interface for an enhanced user experience.
+- Centralized overview of office activities
+- Total clients, meetings, and tasks
+- Quick access to different management sections
 
 ### 👥 Client Management
-- **Add Clients:** Easily add new client information to the system.
-- **View Records:** Access a comprehensive list of client records.
-- **Store Details:** Keep track of company details, contact information, and client status.
-- **Manage Data:** Delete client records securely when required.
+- Add and manage client records
+- Store client contact and company information
+- Track client status
+- Delete outdated records
+- Export client data to Excel
 
 ### 📅 Meeting Management
-- **Schedule:** Plan and schedule meetings with specific clients.
-- **Track Time:** Store precise meeting dates and times.
-- **Categorize:** Select the type of meeting (e.g., Online, In-Person).
-- **Details:** Add participants and define the meeting agenda.
-- **Status Tracking:** Monitor meeting statuses (Scheduled, Completed, Cancelled).
+- Schedule and manage meetings
+- Store meeting details and client information
+- Track meeting status
+- Export meeting records to Excel
 
 ### ✅ Task Management
-- **Create Tasks:** Generate and manage daily office tasks.
-- **Assign:** Allocate tasks to respective team members.
-- **Deadlines:** Set strict due dates to ensure timely completion.
-- **Prioritize:** Set task priorities (High, Medium, Low).
-- **Progress:** Update and track task statuses dynamically.
+- Create and manage office tasks
+- Track task status and priority
+- Monitor pending, in-progress, and completed tasks
+- Export task records to Excel
 
-## 🛠 Technologies Used
+### 📈 Reports & Analytics
+- View administrative activity summaries
+- Monitor client, meeting, and task statistics
+- Visualize data using charts
+- Track task and meeting status
 
-- **Frontend:** HTML5, CSS3, Vanilla JavaScript
-- **Backend:** Python, Flask, Flask-CORS
+### 📑 Administrative Excel Reporting
+- Export individual client, meeting, and task records
+- Generate a consolidated Administrative Report
+- Separate Summary, Clients, Meetings, and Tasks sheets
+- Excel filters for structured data analysis
+- Frozen headers for easier navigation
+- Automatic column sizing
+
+## Technology Stack
+
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** Python, Flask
 - **Database:** SQLite
-- **Architecture:** RESTful APIs
+- **Data & Reporting:** Microsoft Excel, OpenPyXL
+- **Charts:** Chart.js
+- **Version Control:** Git & GitHub
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 OfficeFlow/
-├── app.py                # Main Flask application and API routes
-├── database.py           # Database connection and table creation logic
-├── requirements.txt      # Python dependencies
-├── README.md             # Project documentation
-├── .gitignore            # Ignored files for Git
 │
-├── templates/            # HTML templates
-│   ├── index.html        # Dashboard
-│   ├── clients.html      # Client Management
-│   ├── meetings.html     # Meeting Management
-│   └── tasks.html        # Task Management
+├── app.py
+├── database.py
+├── officeflow.db
+├── requirements.txt
+├── README.md
 │
-└── static/               # Static assets
+├── templates/
+│   ├── index.html
+│   ├── clients.html
+│   ├── meetings.html
+│   ├── tasks.html
+│   └── reports.html
+│
+└── static/
     ├── css/
-    │   └── style.css     # Global styles
+    │   └── style.css
+    │
     └── js/
-        ├── dashboard.js  # Dashboard logic
-        ├── clients.js    # Client management logic
-        ├── meetings.js   # Meeting management logic
-        └── tasks.js      # Task management logic
-```
-
-## 🚀 How to Run the Project
-
-Follow these steps to set up and run the project locally.
-
-**1. Clone the Repository**
-```bash
+        ├── dashboard.js
+        ├── clients.js
+        ├── meetings.js
+        └── tasks.js
+How to Run
+1. Clone the repository
 git clone https://github.com/Rajashree185/OfficeFlow.git
+2. Navigate to the project
 cd OfficeFlow
-```
-
-**2. Create a Virtual Environment**
-```bash
-python -m venv venv
-```
-
-**3. Activate the Virtual Environment**
-- On **Windows**:
-  ```cmd
-  venv\Scripts\activate
-  ```
-- On **macOS/Linux**:
-  ```bash
-  source venv/bin/activate
-  ```
-
-**4. Install Dependencies**
-```bash
+3. Install dependencies
 pip install -r requirements.txt
-```
-
-**5. Run the Application**
-```bash
+4. Run the application
 python app.py
-```
-*The database is automatically initialized when the Flask application starts for the first time.*
+5. Open in browser
+http://127.0.0.1:5000
+Administrative Use Cases
 
-**6. Access the Application**
-Open your preferred web browser and navigate to:
-```text
-http://127.0.0.1:5000/
-```
+OfficeFlow can be used for:
 
-## 🔄 Application Workflow
+Maintaining client records
+Scheduling and tracking meetings
+Managing daily office tasks
+Monitoring task progress
+Preparing administrative reports
+Exporting structured records to Excel
+Reviewing office activity through charts and summaries
+Project Objective
 
-```mermaid
-graph TD
-    A[Dashboard] --> B[Client Management]
-    A --> C[Meeting Management]
-    A --> D[Task Management]
-    
-    B --> B1[Add Client]
-    B --> B2[View Clients]
-    B --> B3[Delete Client]
-    
-    C --> C1[Schedule Meeting]
-    C --> C2[View Meetings]
-    C --> C3[Delete Meeting]
-    
-    D --> D1[Create Task]
-    D --> D2[Assign Task]
-    D --> D3[Update Status]
-    D --> D4[Delete Task]
-```
+The objective of OfficeFlow is to provide a simple centralized system for organizing office information and reducing manual effort in maintaining administrative records.
 
-## 🗄 Database
+Future Improvements
+User authentication and role-based access
+Automated email notifications
+Advanced monthly and yearly reports
+Cloud database integration
+Automated backup and restore
+Author
 
-OfficeFlow utilizes **SQLite** for robust and lightweight data storage. The database schema includes three main tables:
-- `Clients`
-- `Meetings`
-- `Tasks`
-
-## 🔌 REST API Endpoints
-
-The backend provides structured REST API endpoints for seamless frontend-backend communication.
-
-### Client APIs
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/clients` | Retrieve all clients |
-| `POST` | `/api/clients` | Add a new client |
-| `DELETE` | `/api/clients/<id>` | Delete a specific client |
-
-### Meeting APIs
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/meetings` | Retrieve all meetings |
-| `POST` | `/api/meetings` | Schedule a new meeting |
-| `DELETE` | `/api/meetings/<id>` | Delete a specific meeting |
-
-### Task APIs
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/tasks` | Retrieve all tasks |
-| `POST` | `/api/tasks` | Create a new task |
-| `PUT` | `/api/tasks/<id>` | Update a specific task |
-| `DELETE` | `/api/tasks/<id>` | Delete a specific task |
-
-## 🎯 Purpose
-
-OfficeFlow was developed as a practical full-stack project to demonstrate:
-- Web application development using Flask
-- Frontend and backend integration
-- RESTful API design and development
-- SQLite database management and CRUD operations
-- JavaScript-based DOM manipulation and API interaction
-- Clean and responsive UI design principles
-
-## 🔮 Future Improvements
-
-Potential features for future releases:
-- 🔒 **User Authentication & Authorization:** Role-based access control (Admin, Employee).
-- 🔍 **Advanced Search & Filtering:** Quickly locate clients, meetings, and tasks.
-- 🔔 **Notifications & Reminders:** Email or in-app alerts for upcoming meetings/tasks.
-- 📈 **Reporting:** Generate and export data reports (CSV/PDF).
-- 🔗 **Integrations:** Sync with external productivity tools like Google Calendar.
-
-## 👨‍💻 Author
-
-**Rajashree Ray**
-*Computer Science & Engineering Student*
+Rajashree Ray
