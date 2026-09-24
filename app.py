@@ -1,6 +1,10 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, send_file
 from flask_cors import CORS
 from database import create_tables, get_db_connection
+
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+from io import BytesIO
 
 app = Flask(__name__)
 CORS(app)
@@ -177,6 +181,10 @@ def delete_meeting(meeting_id):
 def tasks_page():
     return render_template("tasks.html")
 
+@app.route("/reports")
+def reports_page():
+    return render_template("reports.html")
+
 
 @app.route("/api/tasks", methods=["GET"])
 def get_tasks():
@@ -277,6 +285,409 @@ def delete_task(task_id):
     return jsonify({
         "message": "Task deleted successfully"
     })
+
+# Export clients to Excel
+@app.route("/export/clients")
+def export_clients():
+    connection = get_db_connection()
+
+    clients = connection.execute("""
+        SELECT id, name, company, country, email, phone, status
+        FROM clients
+        ORDER BY id DESC
+    """).fetchall()
+
+    connection.close()
+
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = "Clients"
+
+    headers = [
+        "ID",
+        "Name",
+        "Company",
+        "Country",
+        "Email",
+        "Phone",
+        "Status"
+    ]
+
+    sheet.append(headers)
+
+    for client in clients:
+        sheet.append([
+            client["id"],
+            client["name"],
+            client["company"],
+            client["country"],
+            client["email"],
+            client["phone"],
+            client["status"]
+        ])
+
+    # Format header
+    for cell in sheet[1]:
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal="center")
+
+    # Add filter
+    sheet.auto_filter.ref = sheet.dimensions
+
+    # Freeze header row
+    sheet.freeze_panes = "A2"
+
+    # Adjust column widths
+    for column in sheet.columns:
+        max_length = 0
+        column_letter = column[0].column_letter
+
+        for cell in column:
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
+
+        sheet.column_dimensions[column_letter].width = max_length + 3
+
+    file = BytesIO()
+    workbook.save(file)
+    file.seek(0)
+
+    return send_file(
+        file,
+        as_attachment=True,
+        download_name="OfficeFlow_Clients.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+
+# Export meetings to Excel
+@app.route("/export/meetings")
+def export_meetings():
+    connection = get_db_connection()
+
+    meetings = connection.execute("""
+        SELECT meetings.*, 
+               clients.name AS client_name,
+               clients.company AS client_company
+        FROM meetings
+        LEFT JOIN clients ON meetings.client_id = clients.id
+        ORDER BY meetings.date ASC, meetings.time ASC
+    """).fetchall()
+
+    connection.close()
+
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = "Meetings"
+
+    headers = [
+        "ID",
+        "Client",
+        "Company",
+        "Title",
+        "Date",
+        "Time",
+        "Meeting Type",
+        "Participants",
+        "Agenda",
+        "Status"
+    ]
+
+    sheet.append(headers)
+
+    for meeting in meetings:
+        sheet.append([
+            meeting["id"],
+            meeting["client_name"],
+            meeting["client_company"],
+            meeting["title"],
+            meeting["date"],
+            meeting["time"],
+            meeting["meeting_type"],
+            meeting["participants"],
+            meeting["agenda"],
+            meeting["status"]
+        ])
+
+    # Format header
+    for cell in sheet[1]:
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal="center")
+
+    # Add filter
+    sheet.auto_filter.ref = sheet.dimensions
+
+    # Freeze header row
+    sheet.freeze_panes = "A2"
+
+    # Adjust column widths
+    for column in sheet.columns:
+        max_length = 0
+        column_letter = column[0].column_letter
+
+        for cell in column:
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
+
+        sheet.column_dimensions[column_letter].width = max_length + 3
+
+    file = BytesIO()
+    workbook.save(file)
+    file.seek(0)
+
+    return send_file(
+        file,
+        as_attachment=True,
+        download_name="OfficeFlow_Meetings.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+
+# Export tasks to Excel
+@app.route("/export/tasks")
+def export_tasks():
+    connection = get_db_connection()
+
+    tasks = connection.execute("""
+        SELECT id, title, description, assigned_to,
+               due_date, priority, status
+        FROM tasks
+        ORDER BY due_date ASC
+    """).fetchall()
+
+    connection.close()
+
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = "Tasks"
+
+    headers = [
+        "ID",
+        "Title",
+        "Description",
+        "Assigned To",
+        "Due Date",
+        "Priority",
+        "Status"
+    ]
+
+    sheet.append(headers)
+
+    for task in tasks:
+        sheet.append([
+            task["id"],
+            task["title"],
+            task["description"],
+            task["assigned_to"],
+            task["due_date"],
+            task["priority"],
+            task["status"]
+        ])
+
+    # Format header
+    for cell in sheet[1]:
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal="center")
+
+    # Add filter
+    sheet.auto_filter.ref = sheet.dimensions
+
+    # Freeze header row
+    sheet.freeze_panes = "A2"
+
+    # Adjust column widths
+    for column in sheet.columns:
+        max_length = 0
+        column_letter = column[0].column_letter
+
+        for cell in column:
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
+
+        sheet.column_dimensions[column_letter].width = max_length + 3
+
+    file = BytesIO()
+    workbook.save(file)
+    file.seek(0)
+
+    return send_file(
+        file,
+        as_attachment=True,
+        download_name="OfficeFlow_Tasks.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+@app.route("/export/administrative-report")
+def export_administrative_report():
+
+    # Create workbook
+    workbook = Workbook()
+
+    # Connect to database
+    conn = get_db_connection()
+
+    clients = conn.execute("SELECT * FROM clients").fetchall()
+    meetings = conn.execute("SELECT * FROM meetings").fetchall()
+    tasks = conn.execute("SELECT * FROM tasks").fetchall()
+
+    conn.close()
+
+
+    # =========================
+    # SUMMARY SHEET
+    # =========================
+
+    summary_sheet = workbook.active
+    summary_sheet.title = "Summary"
+
+    summary_sheet.append([
+        "OfficeFlow Administrative Report",
+        ""
+    ])
+
+    summary_sheet.append([
+        "",
+        ""
+    ])
+
+    summary_sheet.append([
+        "Category",
+        "Total"
+    ])
+
+    summary_sheet.append([
+        "Total Clients",
+        len(clients)
+    ])
+
+    summary_sheet.append([
+        "Total Meetings",
+        len(meetings)
+    ])
+
+    summary_sheet.append([
+        "Total Tasks",
+        len(tasks)
+    ])
+
+
+    # Format summary
+    summary_sheet["A1"].font = Font(
+        bold=True,
+        size=16
+    )
+
+    for cell in summary_sheet[3]:
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(
+            horizontal="center"
+        )
+
+    summary_sheet.column_dimensions["A"].width = 30
+    summary_sheet.column_dimensions["B"].width = 20
+
+
+    # =========================
+    # FUNCTION TO CREATE SHEET
+    # =========================
+
+    def create_data_sheet(workbook, sheet_name, rows):
+
+        sheet = workbook.create_sheet(sheet_name)
+
+        if not rows:
+            sheet.append(["No data available"])
+            return
+
+        # Get actual column names from database
+        headers = rows[0].keys()
+
+        # Add headers
+        sheet.append(list(headers))
+
+        # Add database rows
+        for row in rows:
+            sheet.append([
+                row[column]
+                for column in headers
+            ])
+
+        # Format header
+        for cell in sheet[1]:
+            cell.font = Font(bold=True)
+            cell.alignment = Alignment(
+                horizontal="center"
+            )
+
+        # Freeze header
+        sheet.freeze_panes = "A2"
+
+        # Add filter
+        sheet.auto_filter.ref = sheet.dimensions
+
+        # Automatic column width
+        for column in sheet.columns:
+
+            max_length = 0
+
+            column_letter = column[0].column_letter
+
+            for cell in column:
+
+                if cell.value is not None:
+
+                    max_length = max(
+                        max_length,
+                        len(str(cell.value))
+                    )
+
+            sheet.column_dimensions[
+                column_letter
+            ].width = min(
+                max_length + 3,
+                40
+            )
+
+
+    # =========================
+    # CREATE DATA SHEETS
+    # =========================
+
+    create_data_sheet(
+        workbook,
+        "Clients",
+        clients
+    )
+
+    create_data_sheet(
+        workbook,
+        "Meetings",
+        meetings
+    )
+
+    create_data_sheet(
+        workbook,
+        "Tasks",
+        tasks
+    )
+
+
+    # =========================
+    # CREATE EXCEL FILE
+    # =========================
+
+    file = BytesIO()
+
+    workbook.save(file)
+
+    file.seek(0)
+
+    return send_file(
+        file,
+        as_attachment=True,
+        download_name="OfficeFlow_Administrative_Report.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

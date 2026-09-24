@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>OfficeFlow - Reports</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .reports-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .report-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .report-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .report-number {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .summary-section {
+            background: white;
+            padding: 25px;
+            margin-top: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .summary-section h2 {
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .chart-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <h2>OfficeFlow</h2>
+
+        <div>
+            <a href="/">Dashboard</a>
+            <a href="/clients">Clients</a>
+            <a href="/meetings">Meetings</a>
+            <a href="/tasks">Tasks</a>
+            <a href="/reports">Reports</a>
+        </div>
+    </nav>
+
+
+    <div class="reports-container">
+
+        <a href="/" class="back-link">← Back to Dashboard</a>
+
+<h1>Reports & Analytics</h1>
+
+<p>
+    View office activity summaries, task progress, meeting status,
+    client information, and administrative data.
+</p>
+
+<br>
+
+<a href="/export/administrative-report">
+    <button type="button">
+        Export Administrative Report
+    </button>
+</a>
+
+
+        <!-- Main Summary Cards -->
+        <div class="report-grid">
+
+            <div class="report-card">
+                <h3>Total Clients</h3>
+                <div class="report-number" id="totalClients">0</div>
+            </div>
+
+            <div class="report-card">
+                <h3>Total Meetings</h3>
+                <div class="report-number" id="totalMeetings">0</div>
+            </div>
+
+            <div class="report-card">
+                <h3>Total Tasks</h3>
+                <div class="report-number" id="totalTasks">0</div>
+            </div>
+
+            <div class="report-card">
+                <h3>Pending Tasks</h3>
+                <div class="report-number" id="pendingTasks">0</div>
+            </div>
+
+        </div>
+
+
+        <!-- Charts -->
+        <div class="charts-grid">
+
+            <!-- Task Chart -->
+            <div class="chart-box">
+                <h2>Task Status</h2>
+
+                <div class="chart-container">
+                    <canvas id="taskChart"></canvas>
+                </div>
+            </div>
+
+
+            <!-- Meeting Chart -->
+            <div class="chart-box">
+                <h2>Meeting Status</h2>
+
+                <div class="chart-container">
+                    <canvas id="meetingChart"></canvas>
+                </div>
+            </div>
+
+
+            <!-- Client Chart -->
+            <div class="chart-box">
+                <h2>Client Status</h2>
+
+                <div class="chart-container">
+                    <canvas id="clientChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Client Summary -->
+        <div class="summary-section">
+
+            <h2>Client Summary</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Active</td>
+                        <td id="activeClients">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Follow-up</td>
+                        <td id="followupClients">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Inactive</td>
+                        <td id="inactiveClients">0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+        <!-- Meeting Summary -->
+        <div class="summary-section">
+
+            <h2>Meeting Summary</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Upcoming</td>
+                        <td id="upcomingMeetings">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Completed</td>
+                        <td id="completedMeetings">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Cancelled</td>
+                        <td id="cancelledMeetings">0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+        <!-- Task Summary -->
+        <div class="summary-section">
+
+            <h2>Task Summary</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Pending</td>
+                        <td id="pendingTaskSummary">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>In Progress</td>
+                        <td id="progressTasks">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Completed</td>
+                        <td id="completedTasks">0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        async function loadReports() {
+
+            try {
+
+                // Get data from APIs
+                const clientsResponse = await fetch('/api/clients');
+                const meetingsResponse = await fetch('/api/meetings');
+                const tasksResponse = await fetch('/api/tasks');
+
+                const clients = await clientsResponse.json();
+                const meetings = await meetingsResponse.json();
+                const tasks = await tasksResponse.json();
+
+
+                // =========================
+                // CLIENT DATA
+                // =========================
+
+                const activeClients =
+                    clients.filter(client =>
+                        client.status &&
+                        client.status.toLowerCase() === "active"
+                    ).length;
+
+                const followupClients =
+                    clients.filter(client =>
+                        client.status &&
+                        client.status.toLowerCase() === "follow-up"
+                    ).length;
+
+                const inactiveClients =
+                    clients.filter(client =>
+                        client.status &&
+                        client.status.toLowerCase() === "inactive"
+                    ).length;
+
+
+                document.getElementById("totalClients").textContent =
+                    clients.length;
+
+                document.getElementById("activeClients").textContent =
+                    activeClients;
+
+                document.getElementById("followupClients").textContent =
+                    followupClients;
+
+                document.getElementById("inactiveClients").textContent =
+                    inactiveClients;
+
+
+                // =========================
+                // MEETING DATA
+                // =========================
+
+                const upcomingMeetings =
+                    meetings.filter(meeting =>
+                        meeting.status &&
+                        meeting.status.toLowerCase() === "upcoming"
+                    ).length;
+
+                const completedMeetings =
+                    meetings.filter(meeting =>
+                        meeting.status &&
+                        meeting.status.toLowerCase() === "completed"
+                    ).length;
+
+                const cancelledMeetings =
+                    meetings.filter(meeting =>
+                        meeting.status &&
+                        meeting.status.toLowerCase() === "cancelled"
+                    ).length;
+
+
+                document.getElementById("totalMeetings").textContent =
+                    meetings.length;
+
+                document.getElementById("upcomingMeetings").textContent =
+                    upcomingMeetings;
+
+                document.getElementById("completedMeetings").textContent =
+                    completedMeetings;
+
+                document.getElementById("cancelledMeetings").textContent =
+                    cancelledMeetings;
+
+
+                // =========================
+                // TASK DATA
+                // =========================
+
+                const pendingTasks =
+                    tasks.filter(task =>
+                        task.status &&
+                        task.status.toLowerCase() === "pending"
+                    ).length;
+
+                const progressTasks =
+                    tasks.filter(task =>
+                        task.status &&
+                        task.status.toLowerCase() === "in progress"
+                    ).length;
+
+                const completedTasks =
+                    tasks.filter(task =>
+                        task.status &&
+                        task.status.toLowerCase() === "completed"
+                    ).length;
+
+
+                document.getElementById("totalTasks").textContent =
+                    tasks.length;
+
+                document.getElementById("pendingTasks").textContent =
+                    pendingTasks;
+
+                document.getElementById("pendingTaskSummary").textContent =
+                    pendingTasks;
+
+                document.getElementById("progressTasks").textContent =
+                    progressTasks;
+
+                document.getElementById("completedTasks").textContent =
+                    completedTasks;
+
+
+                // =========================
+                // TASK CHART
+                // =========================
+
+                new Chart(
+                    document.getElementById("taskChart"),
+                    {
+                        type: "doughnut",
+
+                        data: {
+                            labels: [
+                                "Pending",
+                                "In Progress",
+                                "Completed"
+                            ],
+
+                            datasets: [{
+                                data: [
+                                    pendingTasks,
+                                    progressTasks,
+                                    completedTasks
+                                ]
+                            }]
+                        },
+
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    }
+                );
+
+
+                // =========================
+                // MEETING CHART
+                // =========================
+
+                new Chart(
+                    document.getElementById("meetingChart"),
+                    {
+                        type: "bar",
+
+                        data: {
+                            labels: [
+                                "Upcoming",
+                                "Completed",
+                                "Cancelled"
+                            ],
+
+                            datasets: [{
+                                label: "Meetings",
+
+                                data: [
+                                    upcomingMeetings,
+                                    completedMeetings,
+                                    cancelledMeetings
+                                ]
+                            }]
+                        },
+
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                );
+
+
+                // =========================
+                // CLIENT CHART
+                // =========================
+
+                new Chart(
+                    document.getElementById("clientChart"),
+                    {
+                        type: "pie",
+
+                        data: {
+                            labels: [
+                                "Active",
+                                "Follow-up",
+                                "Inactive"
+                            ],
+
+                            datasets: [{
+                                data: [
+                                    activeClients,
+                                    followupClients,
+                                    inactiveClients
+                                ]
+                            }]
+                        },
+
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    }
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Error loading reports:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // Load reports when page opens
+        loadReports();
+
+    </script>
+
+</body>
+</html>
